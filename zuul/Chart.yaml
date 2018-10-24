@@ -1,0 +1,22 @@
+apiVersion: v1
+name: zuul
+version: {{ zuul_version }}
+description: >
+    Zuul is a program that drives continuous integration, delivery, and
+    deployment systems with a focus on project gating and interrelated
+    projects.
+keywords:
+  - ci
+  - cd
+  - testing
+  - infrastructure
+  - python
+  - ansible
+home: https://zuul-ci.org/
+sources:
+  - https://git.zuul-ci.org/zuul.git
+maintainers:
+  - name: Clint Byrum
+    email: clint@fewbar.com
+    url: https://fewbar.com/
+icon: https://zuul-ci.org/favicon.ico

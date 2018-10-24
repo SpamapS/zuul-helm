@@ -1,0 +1,7 @@
+git_user_email: zuul@zuul-ci.org
+web_status_url: https://yoursite/status.html
+web_listen_address: "::"
+web_websocket_url: wss://yoursite/console-stream
+github_webhook_token: null
+zuul_site_variables:
+  ansible_python_interpreter: /usr/bin/python3

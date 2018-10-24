@@ -1,0 +1,125 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: zuul-base
+data:
+  gearman-logging.conf: |-
+    [loggers]
+    keys=root,gear
+
+    [handlers]
+    keys=console
+
+    [formatters]
+    keys=simple
+
+    [logger_root]
+    level=DEBUG
+    handlers=console
+
+    [logger_gear]
+    level=DEBUG
+    handlers=console
+    qualname=gear
+
+    [handler_console]
+    level=DEBUG
+    class=StreamHandler
+    formatter=simple
+    args=(sys.stdout,)
+
+    [formatter_simple]
+    format=%(asctime)s %(levelname)s %(name)s: %(message)s
+    datefmt=
+
+
+  logging.conf: |+
+    [loggers]
+    keys=root,zuul,github
+
+    [handlers]
+    keys=console
+
+    [formatters]
+    keys=simple
+
+    [logger_root]
+    level=DEBUG
+    handlers=console
+
+    [logger_zuul]
+    level=DEBUG
+    handlers=console
+    qualname=zuul
+
+    [logger_github]
+    level=DEBUG
+    handlers=console
+    qualname=github
+
+    [handler_console]
+    level=DEBUG
+    class=StreamHandler
+    formatter=simple
+    args=(sys.stdout,)
+
+    [formatter_simple]
+    format=%(asctime)s %(levelname)s %(name)s: %(message)s
+    datefmt=
+  zuul.conf: |+
+    [gearman]
+    server=gearman
+    ssl_ca=/etc/ssl/gearman-client/root-ca.pem
+    ssl_cert=/etc/ssl/gearman-client/client.pem
+    ssl_key=/etc/ssl/gearman-client/client.key
+
+    [zookeeper]
+    hosts=zk-0.zookeeper,zk-1.zookeeper,zk-2.zookeeper,zk-3.zookeeper,zk-4.zookeeper
+
+    [zuul]
+    pidfile=/run/zuul.pid
+
+    [executor]
+    pidfile=/run/zuul.pid
+    log_config=/etc/zuul/logging.conf
+    private_key_file=/opt/secrets/ssh-nodes/id_rsa
+    finger_port=1079
+    variables=/etc/zuul/variables/variables.yaml
+
+    [merger]
+    pidfile=/run/zuul.pid
+    log_config=/etc/zuul/logging.conf
+    git_user_email={{ git_user_email }}
+    git_user_name=Zuul
+
+    [scheduler]
+    pidfile=/run/zuul.pid
+    log_config=/etc/zuul/logging.conf
+    tenant_config=/etc/zuul/main.yaml
+
+    [gearman_server]
+    start=true
+    ssl_ca=/etc/ssl/gearman-server/root-ca.pem
+    ssl_cert=/etc/ssl/gearman-server/server.pem
+    ssl_key=/etc/ssl/gearman-server/server.key
+    log_config=/etc/zuul/gearman-logging.conf
+
+    [web]
+    pidfile=/run/zuul.pid
+    status_url={{ web_status_url }}
+    log_config=/etc/zuul/logging.conf
+    listen_address={{ web_listen_address }}
+    gearman_server=gearman
+    websocket_url={{ web_websocket_url }}
+
+    [connection zuul-git]
+    driver=git
+    baseurl=https://git.openstack.org/
+
+    [connection "github"]
+    driver=github
+    app_id=16347
+    app_key=/etc/zuul/github/github.pem
+    webhook_token={{ webhook_token }}
+  main.yaml: |+
+    {{ .Values.main_yaml }}

@@ -1,0 +1,9 @@
+dependencies:
+  - name: nodepool
+    version: '0.1'
+    repository: {{ local_charts_repository }}
+  - name: zookeeper
+    version: '1.2.0'
+    repository: https://storage.googleapis.com/kubernetes-charts-incubator
+  - name: mysql
+    version: '0.10.2'
