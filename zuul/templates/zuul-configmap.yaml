@@ -89,7 +89,7 @@ data:
     [merger]
     pidfile=/run/zuul.pid
     log_config=/etc/zuul/logging.conf
-    git_user_email={{ git_user_email }}
+    git_user_email={{ .Values.git_user_email }}
     git_user_name=Zuul
 
     [scheduler]
@@ -106,20 +106,20 @@ data:
 
     [web]
     pidfile=/run/zuul.pid
-    status_url={{ web_status_url }}
+    status_url={{ .Values.web_status_url }}
     log_config=/etc/zuul/logging.conf
-    listen_address={{ web_listen_address }}
+    listen_address={{ .Values.web_listen_address }}
     gearman_server=gearman
-    websocket_url={{ web_websocket_url }}
+    websocket_url={{ .Values.web_websocket_url }}
 
     [connection zuul-git]
     driver=git
     baseurl=https://git.openstack.org/
 
-    [connection "github"]
-    driver=github
-    app_id=16347
-    app_key=/etc/zuul/github/github.pem
-    webhook_token={{ webhook_token }}
+    {{- range $name, $settings := .Values.connections }}
+    [connection {{ $name | quote }}]
+    {{- range $key, $value := $settings }}
+    {{ $key }}={{ $value }}
+    {{end -}}
   main.yaml: |+
     {{ .Values.main_yaml }}

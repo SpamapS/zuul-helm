@@ -29,7 +29,7 @@ data:
         }
 
         location /api {
-          proxy_pass http://zuul-web:9000/api/tenant/GoodMoney;
+          proxy_pass http://zuul-web:9000/api/tenant/{{ whitelabel_tenant }};
         }
 
         #error_page  404              /404.html;
